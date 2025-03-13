@@ -5,6 +5,7 @@
 
 
 <div class="container mx-auto pt-4 px-4 pb-5">
+    <p class="text-center text-white text-lg">Note: For login use ' Iahia ' as username and ' 1230 ' as password or create a new super user</p>
     <h1 class="text-center mb-5 text-4xl text-bold text-white">All Students List</h1>
     <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {% for student in students %}
@@ -12,8 +13,8 @@
             class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
             <div class="flex flex-col items-center pb-10 student_data">
                 <!-- Image section, centered and rounded -->
-                <img class="w-24 h-24 my-4 rounded-full border-2 border-white shadow-lg mx-auto" src="{{ student.image.url }}"
-                    alt="Student Image" />
+                <img class="w-24 h-24 my-4 rounded-full border-2 border-white shadow-lg mx-auto"
+                    src="{{ student.image.url }}" alt="Student Image" />
 
                 <!-- Student Details Section -->
                 <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Name : {{ student.name }}</h5>
@@ -22,10 +23,18 @@
 
                 <!-- Action button at the bottom -->
                 <div class="flex mt-4 md:mt-6">
+
+                    {% if user.is_authenticated %}
                     <a href="{% url 'studentdetails' student.id %}"
                         class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         See Details
                     </a>
+                    {% else %}
+                    <button onclick="showMessage()"
+                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700">
+                        See Details
+                    </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
