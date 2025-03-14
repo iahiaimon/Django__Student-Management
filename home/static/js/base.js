@@ -3,6 +3,6 @@ setTimeout(function () {
 }, 3000);
 
 
-function showMessage(){
+function loginadd(){
     alert("You have to login first to add new student!")
 }
