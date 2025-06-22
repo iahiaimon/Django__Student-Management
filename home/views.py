@@ -19,7 +19,7 @@ def addstudent(request):
 
     if not request.user.is_authenticated:
         messages.error(request, "You have to login first to add a new student")
-        return redirect('home')
+        return redirect("home")
 
     form = AddStudentForm()
 
@@ -36,6 +36,7 @@ def addstudent(request):
 
     return render(request, "add_student.html", {"form": form})
 
+
 @login_required
 def studentdetails(request, id):
 
@@ -47,6 +48,7 @@ def studentdetails(request, id):
     return render(request, "details.html", {"student": student})
 
 
+@login_required
 def editstudent(request, id):
     student = AddStudent.objects.get(id=id)
     form = AddStudentForm(instance=student)
@@ -64,10 +66,18 @@ def editstudent(request, id):
     return render(request, "add_student.html", {"form": form, "edit": True})
 
 
+@login_required
 def deletestudent(request, id):
-    student = AddStudent.objects.get(id=id)
-    student.delete()
-    messages.success(request, "✅ Student deleted successfully! ")
+    if request.user.is_superuser and request.user.username == "Iahia":
+        try:
+            student = AddStudent.objects.get(id=id)
+            student.delete()
+            messages.success(request, "✅ Student deleted successfully!")
+        except AddStudent.DoesNotExist:
+            messages.error(request, "❌ Student not found!")
+    else:
+        messages.error(request, "❌ You do not have permission to delete this item.")
+
     return redirect("home")
 
 
@@ -79,9 +89,7 @@ def user_login(request):
         name = request.POST["name"]
         password = request.POST["password"]
 
-        user = (
-            User.objects.filter(username=name).first()
-        )
+        user = User.objects.filter(username=name).first()
 
         if user is not None:
             # Authenticate the user
